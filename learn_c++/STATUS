@@ -1,0 +1,7 @@
+------------------------------------------------
+namespace
+
+namespace is a collection of names that help programmers avoid name conflicts.
+Especially, as number of functions increase in the codebase, there may be functions
+with the same name. Namespace helps us figure out which function we are referring to.
+------------------------------------------------
