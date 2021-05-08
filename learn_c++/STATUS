@@ -1,7 +1,23 @@
 ------------------------------------------------
-namespace
+Lesson 1: namespace
 
 namespace is a collection of names that help programmers avoid name conflicts.
 Especially, as number of functions increase in the codebase, there may be functions
 with the same name. Namespace helps us figure out which function we are referring to.
 ------------------------------------------------
+
+------------------------------------------------
+Lesson 2: reference
+int a = 5;
+int& another_a = a;
+
+difference between reference and pointer
+- reference must be initialized
+- once reference is assigned, cannot be changed. On the other hand, pointer can be reassigned to point to different var.
+- reference does not exist on memory, it is simply an alias of other var. (except for reference in the argument)
+- there can't be array of references, references to references, pointers to references
+
+why use reference instead of pointer?
+- no need for unnecessary & and *
+------------------------------------------------
+
