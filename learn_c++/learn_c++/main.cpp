@@ -30,6 +30,8 @@ int main(int argc, const char * argv[]) {
     std::cout << header2::foo() << std::endl;
      */
     
+    /* reference */
+    /*
     int a = 3;
     int& another_a = a;
     
@@ -48,5 +50,10 @@ int main(int argc, const char * argv[]) {
     ref[2] = 1;
     
     std::cout << arr[0] << arr[1] << arr[2] << std::endl;
+     */
+    
+    for (int i = 0; i < 10; ++i) {
+        std::cout << i;
+    }
     return 0;
 }

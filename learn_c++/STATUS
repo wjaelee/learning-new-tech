@@ -21,3 +21,111 @@ why use reference instead of pointer?
 - no need for unnecessary & and *
 ------------------------------------------------
 
+------------------------------------------------
+Lesson 3: function overloading
+
+The steps C++ compiler takes to find the overloaded function
+1. Find function that exactly matches the type of arguments
+2. If there is no exact match, check if there is function that matches
+after type conversion (casting)
+- char, unsigned char, short => int
+- unsigned short => int or unsigned int
+- float => double
+- enum => int
+3. Try even more general type conversion to find the function
+- number type => number type
+- 0 => pointer type or number type
+- pointer => void pointer
+4. Try user defined type conversion
+------------------------------------------------
+
+------------------------------------------------
+Lesson 4: Class
+class Date {
+  int year_;
+  int month_;  // 1 부터 12 까지.
+  int day_;    // 1 부터 31 까지.
+
+ public:
+  void SetDate(int year, int month, int date);
+  void AddDay(int inc);
+  void AddMonth(int inc);
+  void AddYear(int inc);
+
+  // 해당 월의 총 일 수를 구한다.
+  int GetCurrentMonthTotalDays(int year, int month);
+
+  void ShowDate();
+};
+
+void Date::SetDate(int year, int month, int day) {
+  year_ = year;
+  month_ = month;
+  day_ = day;
+}
+
+Why define function outside of class declaration?
+- avoid class being too long
+- but in the exception of template class, everything is defined within template class
+------------------------------------------------
+
+------------------------------------------------
+Lesson 5: constructor, copy constructor, destructor
+
+Date(int year, int month, int day) {
+  year_ = year;
+  month_ = month;
+  day_ = day;
+}
+
+Ways to initalize instance
+Date day(2011, 3, 1);  // implicit       <= preferred
+Date day = Date(2012, 3, 1); // explicit
+
+class Test {
+ public:
+  Test() = default;  // 디폴트 생성자를 정의해라
+};
+
+difference between new and malloc
+- new not only allocates memory in heap but also calls constructor
+
+destructor
+
+~Marine();
+Marine::~Marine() {
+  if (name != NULL) {
+    delete[] name;
+  }
+}
+
+copy constructor
+T(const T& a);
+
+Photon_Cannon(const Photon_Cannon& pc);
+
+Photon_Cannon::Photon_Cannon(const Photon_Cannon& pc) {
+  hp = pc.hp;
+  shield = pc.shield;
+  coord_x = pc.coord_x;
+  coord_y = pc.coord_y;
+  damage = pc.damage;
+}
+
+Photon_Cannon pc1(3, 3); // constructor
+Photon_Cannon pc2(pc1); // copy constructor
+Photon_Cannon pc3 = pc2; // copy constructor
+pc3 = pc2; // nothing
+
+default copy constructor makes a shallow copy.
+If we have member field that is dynamically allocated,
+we need to define our own copy constructor to make a deep copy.
+------------------------------------------------
+
+
+
+Questions
+1. what is typedef and why do I need to use it?
+2. what is enum? 
+3. NULL vs nullptr
+
