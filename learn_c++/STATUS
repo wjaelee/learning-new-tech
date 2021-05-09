@@ -248,9 +248,26 @@ class Server {
     return User(user_data);
   }
 };
-
 ------------------------------------------------
 
+------------------------------------------------
+Lesson: operator overloading
+
+overloadable operators
+- "+, -, *" numeric operators
+- "+=, -="
+- ">=, =="
+- "&&, ||"
+- "->, *"       * is a dereference
+- "++, --"
+- "[], ()"      () is a calling function
+
+syntax
+(return type) operator(operator) (argument)
+e.g.
+bool operator==(MyString& str);
+
+------------------------------------------------
 
 Questions
 1. what is typedef and why do I need to use it?
