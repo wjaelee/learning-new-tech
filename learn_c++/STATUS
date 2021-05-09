@@ -122,6 +122,48 @@ If we have member field that is dynamically allocated,
 we need to define our own copy constructor to make a deep copy.
 ------------------------------------------------
 
+------------------------------------------------
+Lesson 6: initialize list, static member variable
+
+Marine::Marine() : hp(50), coord_x(0), coord_y(0), damage(5), is_dead(false) {}
+
+constructor : var1(arg1), var2(arg2), ... {}
+
+Why use initializer list as opposed to normal constructor?
+- initializer list simultaneously construct and initialize
+- without initializer list, construct and then assign
+- if class has member fields that are either constant or reference, initializer list must be used 
+to initialize them
+
+e.g.
+using initializer list:
+int a = 10;
+not using initializer list:
+int a;
+a = 10;
+
+static member variable belongs to a class, not to a specific instance, and gets destroyed when the program ends.
+All instances of the class share a single static member variable.
+
+static function
+
+Usually variables are local and get destroyed when going out of scope.
+But static variable does not get destroyed even after going out of scope. 
+Moreover static variable gets initialized only once.
+It gets stored in the Data segment and gets destroyed when the program ends.
+------------------------------------------------
+
+------------------------------------------------
+T f() const {
+  ...
+  return something
+}
+=> this function does not change values of other vars, can only read
+------------------------------------------------
+
+------------------------------------------------
+Exercise: Make my own string class
+------------------------------------------------
 
 
 Questions
