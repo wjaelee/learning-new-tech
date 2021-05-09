@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <queue>
 
 #include <thread>
 #include <mutex>
@@ -69,6 +70,66 @@ void add_worker(int* count, int num_increments, std::mutex& m) {
     }
     printf("thread %x finished working\n", this_id);
 }
+
+template <typename T>
+class ThreadSafeQueue {
+    std::queue<T> q;
+    std::mutex m;
+public:
+    ThreadSafeQueue(void) : q(), m() {};
+    void enqueue(T data) {
+        m.lock();
+        q.push(data);
+        m.unlock();
+    }
+    
+    T dequeue() const {
+        m.lock();
+        if (q.empty()) {
+            m.unlock();
+            return NULL;
+        }
+        T data = q.front();
+        q.pop();
+        m.unlock();
+        
+        return data;
+    }
+    
+    int size() const {
+        return q.size();
+    }
+};
+
+template <typename T>
+void producer(std::queue<T>& q, int num_items) {
+    for (int i = 0; i < num_items; ++i) {
+        q.push(num_items);
+    }
+}
+
+template <typename T>
+void producer1(std::queue<T>& q, int num_items, std::mutex& m) {
+    for (int i = 0; i < num_items; ++i) {
+        m.lock();
+        q.push(num_items);
+        m.unlock();
+    }
+}
+
+template <typename T>
+void producer2(ThreadSafeQueue<T>& q, int num_items) {
+    for (int i = 0; i < num_items; ++i) {
+        q.enqueue(i);
+    }
+}
+
+void producer3(ThreadSafeQueue<int>& q, int num_items) {
+    for (int i = 0; i < num_items; ++i) {
+        q.enqueue(i);
+    }
+}
+
 
 int main(int argc, const char * argv[]) {
     // insert code here...
@@ -162,6 +223,7 @@ int main(int argc, const char * argv[]) {
     std::cout << "Total: " << total << std::endl;
     */
     
+    /*
     int count = 0;
     std::mutex m;
     std::vector<std::thread> workers;
@@ -174,7 +236,51 @@ int main(int argc, const char * argv[]) {
     }
     
     std::cout << "Count: " << count << std::endl; // expect 10000*10 = 100,000
+     */
     
     
+    /*
+    std::queue<int> q;
+    std::vector<std::thread> producers;
+    std::mutex m;
+    
+    for (int i = 0; i < 5; ++i) {
+        producers.push_back(std::thread(producer1<int>, std::ref(q), 10000, std::ref(m)));
+    }
+    
+    for (int i = 0; i < 5; ++i) {
+        producers[i].join();
+    }
+    
+    std::cout << "Number of items in queue: " << q.size() << std::endl;
+     */
+    
+    // this is not thread safe and may result in error
+    std::queue<int> q;
+    std::vector<std::thread> producers;
+    
+    for (int i = 0; i < 5; ++i) {
+        producers.push_back(std::thread(producer<int>, std::ref(q), 10000));
+    }
+    
+    for (int i = 0; i < 5; ++i) {
+        producers[i].join();
+    }
+    
+    std::cout << "Number of items in queue: " << q.size() << std::endl;
+    
+    /*
+    ThreadSafeQueue<int> q;
+    std::vector<std::thread> producers;
+    for (int i = 0; i < 5; ++i) {
+        producers.push_back(std::thread(producer2<int>, std::ref(q), 10000));
+        // producers.push_back(std::thread(producer3, std::ref(q), 10000)); // same as above
+    }
+    for (int i = 0; i < 5; ++i) {
+        producers[i].join();
+    }
+    
+    std::cout << "Number of items in queue: " << q.size() << std::endl;
+    */
     return 0;
 }
