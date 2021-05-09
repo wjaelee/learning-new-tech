@@ -165,6 +165,92 @@ T f() const {
 Exercise: Make my own string class
 ------------------------------------------------
 
+------------------------------------------------
+Lesson: Implicit/Explicit conversion, mutable
+
+void DoSomethingWithString(MyString s);
+DoSomethingWithString("abc")
+This line 172 implicity converts "abc" to MyString instance
+because MyString class has a constructor
+MyString(const char* str);
+
+However, this can be problem when
+DoSomethingWithString(3)
+This also runs due to
+// capacity 만큼 미리 할당함.
+MyString(int capacity);
+
+To prevent this, we declare capacity constructor as explicit like the following.
+
+class MyString {
+  char* string_content;  // 문자열 데이터를 가리키는 포인터
+  int string_length;     // 문자열 길이
+
+  int memory_capacity;
+
+ public:
+  // capacity 만큼 미리 할당함. (explicit 키워드에 주목)
+  explicit MyString(int capacity);
+  ...
+}
+
+MyString s = "abc";  // MyString s("abc")
+MyString s = 5;      // MyString s(5), doesn't work
+
+if a member variable is declared as mutable,
+even const function can change its value
+
+#include <iostream>
+
+class A {
+  mutable int data_;
+
+ public:
+  A(int data) : data_(data) {}
+  void DoSomething(int x) const {
+    data_ = x;  // 가능!
+  }
+
+  void PrintData() const { std::cout << "data: " << data_ << std::endl; }
+};
+
+int main() {
+  A a(10);
+  a.DoSomething(3);
+  a.PrintData();
+}
+
+So why do we need mutable in the first place?
+1. in the case of cache. Usually const function do not change the internal state of instance.
+However, depending on the situation, we might want to cahce the result. For example,
+
+class Server {
+  // .... (생략) ....
+
+  Cache cache; // 캐쉬!
+  mutable Cache mutable_cache;
+
+  // 이 함수는 데이터베이스에서 user_id 에 해당하는 유저 정보를 읽어서 반환한다.
+  User GetUserInfo(const int user_id) const {
+    // 1. 캐쉬에서 user_id 를 검색
+    Data user_data = cache.find(user_id);
+
+    // 2. 하지만 캐쉬에 데이터가 없다면 데이터베이스에 요청
+    if (!user_data) {
+      user_data = Database.find(user_id);
+
+      // 그 후 캐쉬에 user_data 등록
+      cache.update(user_id, user_data); // <-- 불가능
+      mutable_cache.update(user_id, user_data); // <-- 가능 
+    }
+
+    // 3. 리턴된 정보로 User 객체 생성
+    return User(user_data);
+  }
+};
+
+------------------------------------------------
+
 
 Questions
 1. what is typedef and why do I need to use it?
