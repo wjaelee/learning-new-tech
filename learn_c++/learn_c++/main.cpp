@@ -7,11 +7,16 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+
+#include <thread>
+#include <mutex>
+#include <chrono>
+
 #include "header1.h"
 #include "header2.h"
 #include "MyString.h"
 #include "vector.h"
-#include <thread>
 using namespace header1;
 using header1::foo;
 
@@ -39,6 +44,30 @@ void func3() {
     for (int i = 0; i < 10; ++i) {
         std::cout << "thread 3 in work!\n";
     }
+}
+
+void worker(int start, int end, int* result) {
+    int sum = 0;
+    for (int i = start; i < end; ++i) {
+        sum += i;
+    }
+    *result = sum;
+    
+    std::thread::id this_id = std::this_thread::get_id();
+    printf("thread %x added from %d to %d and got %d \n", this_id, start, end, sum); //thread safe
+}
+
+void add_worker(int* count, int num_increments, std::mutex& m) {
+   
+    std::thread::id this_id = std::this_thread::get_id();
+    printf("thread %x started working\n", this_id);
+    
+    for (int i = 0; i < num_increments; ++i) {
+        m.lock();
+        (*count)++;
+        m.unlock();
+    }
+    printf("thread %x finished working\n", this_id);
 }
 
 int main(int argc, const char * argv[]) {
@@ -105,6 +134,7 @@ int main(int argc, const char * argv[]) {
     std::cout << str_vec[1] << std::endl;
     */
     
+    /*
     std::thread t1(func1);
     std::thread t2(func2);
     std::thread t3(func3);
@@ -112,5 +142,39 @@ int main(int argc, const char * argv[]) {
     t1.join(); // return after finishing execution
     t2.join();
     t3.join();
+     */
+    
+    /*
+    std::vector<std::thread> workers;
+    std::vector<int> partial_sums(4);
+    for (int i = 0; i < 4; ++i) {
+        workers.push_back(std::thread(worker, i*2500, (i+1)*2500, &partial_sums[i]));
+    }
+    
+    for (int i = 0; i < 4; ++i) {
+        workers[i].join();
+    }
+    
+    int total = 0;
+    for (int i = 0; i < 4; ++i) {
+        total += partial_sums[i];
+    }
+    std::cout << "Total: " << total << std::endl;
+    */
+    
+    int count = 0;
+    std::mutex m;
+    std::vector<std::thread> workers;
+    for (int i = 0; i < 10; ++i) {
+        workers.push_back(std::thread(add_worker, &count, 10000, std::ref(m)));
+    }
+    
+    for (int i = 0; i < 10; ++i) {
+        workers[i].join();
+    }
+    
+    std::cout << "Count: " << count << std::endl; // expect 10000*10 = 100,000
+    
+    
     return 0;
 }
