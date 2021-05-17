@@ -30,7 +30,6 @@
 		EE4E49392647B06900B17333 /* MyString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyString.h; sourceTree = "<group>"; };
 		EE4E493A2647B0A200B17333 /* complex_number.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = complex_number.h; sourceTree = "<group>"; };
 		EE4E493B2647B8D600B17333 /* vector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vector.h; sourceTree = "<group>"; };
-		EE4E493D2647C20700B17333 /* thread_safe_queue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = thread_safe_queue.h; sourceTree = "<group>"; };
 		EE4E493E2647C93E00B17333 /* thread_practice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = thread_practice.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,7 +69,6 @@
 				EE4E49362646BD1900B17333 /* header1.h */,
 				EE4E49372646BD3F00B17333 /* header2.h */,
 				EE4E49392647B06900B17333 /* MyString.h */,
-				EE4E493D2647C20700B17333 /* thread_safe_queue.h */,
 				EE4E493E2647C93E00B17333 /* thread_practice.h */,
 			);
 			path = "learn_c++";
