@@ -1,12 +1,17 @@
-### Italic and Bold
-Italic
+### Italic, Bold, Strikethrough
+#### Italic
 This _word_ is in italic.
+This *word* is also in italic.
 
-Bold
+#### Bold
 This **word** is in bold.
 
-Italic & Bold
+#### Italic & Bold
 This phrase **_is in italic and bold_**.
+
+#### Strikethrough
+~~The world is flat.~~
+
 
 ### Headers
 # Header One
@@ -75,4 +80,30 @@ If you want the line to go on next line, add two spaces at the end
 This line will appear below the first line.
 However, this line will just be a continuation of the second line.  
 Third line
+
+### Table
+| Syntax | Description |
+| ----------- | ----------- |
+| Header | Title |
+| Paragraph | Text |
+
+### Code Block
+```
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "age": 25
+}
+```
+
+### Footnote
+Here's a sentence with a footnote. [^1]
+
+[^1]: This is the footnote.
+
+### Task List
+- [x] Learn about markdown
+- [ ] Learn about vim
+- [ ] Become familiar with vim
+- [ ] Become familiar with markdown
 
